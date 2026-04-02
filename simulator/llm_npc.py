@@ -57,8 +57,10 @@ class LLMNPC:
         # 对话历史
         self.history: List[NPCMessage] = []
         
-        # 跳转检测
-        self._transition_pattern = re.compile(r'\*\*卡片\d+[AB]\*\*|卡片\d+[AB]')
+        # 跳转检测：匹配统一的跳转短语（如「请点击跳过，进入下一环节」）
+        from config import FLOW_CONDITION_TEXT
+        escaped = re.escape(FLOW_CONDITION_TEXT)
+        self._transition_pattern = re.compile(escaped)
     
     def respond(self, student_message: str, context: Optional[List[dict]] = None) -> str:
         """
@@ -123,13 +125,11 @@ class LLMNPC:
             response: NPC的回复
             
         Returns:
-            跳转目标（如"卡片2A"）或None
+            跳转目标（此时直接返回统一跳转短语）或None
         """
         match = self._transition_pattern.search(response)
         if match:
-            # 提取跳转目标，移除markdown标记
-            target = match.group(0).replace("**", "")
-            return target
+            return match.group(0)
         return None
     
     def get_clean_response(self, response: str) -> str:

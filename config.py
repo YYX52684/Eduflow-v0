@@ -69,6 +69,10 @@ CARD_DEFAULTS = {
     "default_interaction_rounds": 5,
 }
 
+# 跳转条件配置：A类卡片在达到本环节核心目标时，应仅输出该固定短语；
+# 平台连线的 flowCondition 也会使用同一短语作为匹配条件。
+FLOW_CONDITION_TEXT = os.getenv("FLOW_CONDITION_TEXT", "请点击跳过，进入下一环节")
+
 # 卡片生成器配置
 # 可选值: "dspy" (DSPy结构化生成，唯一支持)
 CARD_GENERATOR_TYPE = os.getenv("CARD_GENERATOR_TYPE", "dspy")

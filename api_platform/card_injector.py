@@ -14,6 +14,7 @@ from typing import List, Dict, Any, Optional, Callable
 from dataclasses import dataclass, field
 
 from .api_client import PlatformAPIClient
+from config import FLOW_CONDITION_TEXT
 
 # 导入卡片默认配置
 try:
@@ -89,14 +90,14 @@ class ParsedCard:
     def to_b_card_format(self) -> dict:
         """
         B类卡片 → 连线过渡提示词格式
-        包含跳转条件（默认使用"卡片XB"格式）
+        包含跳转条件（默认使用全局配置的跳转短语）
         """
         # 清理内容
         content = self.full_content
         content = re.sub(r'^#\s*卡片\d+[AB]\s*\n', '', content.strip())
         
-        # 跳转条件：默认使用"卡片XB"格式，与A类卡片中的跳转指令对应
-        flow_condition = f"卡片{self.stage_num}B"
+        # 跳转条件：默认使用全局统一的跳转短语，与A类卡片中的跳转指令保持一致
+        flow_condition = FLOW_CONDITION_TEXT
         
         return {
             "transition_prompt": content,
